@@ -10,34 +10,28 @@
 
 if (!("valueAsDate" in HTMLInputElement.prototype))
 {
-	function MaybeDate(string)
-	{
-		const time = Date.parse(string);
-		return time == time ? new Date(time) : null;
-	}
-
-	function identity(x) { return x }
-
 	const converter =
 	{
-		"datetime-local": identity,
-		date: identity,
-		time: function(s) { return "1970-01-01T" + s + "Z" }
+		"datetime-local": s => s,
+		date: s => s,
+		time: s => "1970-01-01T" + s + "Z"
 	}
 
 	const extractor =
 	{
-		"datetime-local": function(s) { return s.slice(0, -1) },
-		date: function(s) { return /[^T]*/.exec(s)[0] },
-		time: function(s) { return /T([^Z]*)/.exec(s)[1] }
+		"datetime-local": s => s.slice(0, -1),
+		date: s => /[^T]*/.exec(s)[0],
+		time: s => /T([^Z]*)/.exec(s)[1]
 	}
+
+	const MaybeDate = string => (time => time == time ? new Date(time) : null)(Date.parse(string));
 
 	Object.defineProperty(HTMLInputElement.prototype, "valueAsDate",
 	{
 		get: function()
 		{
 			const f = converter[this.getAttribute("type").toLowerCase()];
-			return f ? MaybeDate(f(this.value)): null;
+			return f ? MaybeDate(f(this.value)) : null;
 		},
 		set: function(date)
 		{

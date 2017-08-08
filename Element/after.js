@@ -8,11 +8,9 @@
 
 "use strict";
 {
-	function Fragment(array)
-	{
-		return array.map(x => x instanceof Node ? x : document.createTextNode(x))
+	const Fragment = array =>
+		array.map(x => x instanceof Node ? x : document.createTextNode(x))
 			.reduce((fragment, node) => fragment.appendChild(node).parentNode, document.createDocumentFragment());
-	}
 
 	[Element.prototype, DocumentType.prototype, CharacterData.prototype].forEach(function(proto)
 	{
