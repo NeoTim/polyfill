@@ -24,6 +24,17 @@ if (!("valueAsDate" in HTMLInputElement.prototype))
 		time: s => /T([^Z]*)/.exec(s)[1]
 	}
 
+	/**
+	 * @summary Validate and convert string to a Date instance
+	 *
+	 * Date constructor creates an invalid object if the applied string is
+	 * invalid.  This function returns null otherwise to conform
+	 * HTMLInputElement#valueAsDate getter.
+	 *
+	 * @param {string} string
+	 *
+	 * @returns {?Date}
+	 */
 	const MaybeDate = string => (time => time == time ? new Date(time) : null)(Date.parse(string));
 
 	Object.defineProperty(HTMLInputElement.prototype, "valueAsDate",
