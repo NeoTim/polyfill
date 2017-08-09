@@ -8,6 +8,16 @@
 
 "use strict";
 {
+	/**
+	 * @summary Create a document fragment from nodes
+	 *
+	 * Non-node arguments are deemed strings and then encapsulated in new text
+	 * nodes.
+	 *
+	 * @param {(Node|string)[]} array
+	 *
+	 * @returns {DocumentFragment}
+	 */
 	const Fragment = array =>
 		array.map(x => x instanceof Node ? x : document.createTextNode(x))
 			.reduce((fragment, node) => fragment.appendChild(node).parentNode, document.createDocumentFragment());
